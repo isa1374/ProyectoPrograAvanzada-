@@ -2,7 +2,7 @@
 
 WEB SERVER 
 
-# Características:
+## Características:
 - Basado en HTTP 1.0.
 - Implementa los métodos HEAD, GET, POST y algunos encabezados.
 - Genera Content-Type y Content-Length correcto para archivos html, css, js, gif, jpg, png, .ico, .txt (como mínimo).
@@ -12,7 +12,7 @@ WEB SERVER
 - Es un demonio.
 - Existen un razonable números de commits (+15?) en el historial del proyecto que evidencían el proceso de desarrollo.
 
-# Entrega:
+## Entrega:
 - Se hará una demo el haciendo apuntar cualquier navegador a la dirección donde estará instalado tu servidor (en AWS de preferencia).
 - Evaluación según la siguiente tabla:
     - 40 - Entrega solo .html.
