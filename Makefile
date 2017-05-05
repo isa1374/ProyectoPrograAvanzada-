@@ -1,5 +1,5 @@
 CFLAGS = -g
-ALL = server client execphp
+ALL = server client 
 
 ALL:${ALL}
 
