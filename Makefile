@@ -1,7 +1,7 @@
-CFLAGS = -g
-ALL = server client 
+CFLAGS=-g
+ALL=server client 
 
 ALL:${ALL}
 
-clean : 
+clean:
 	\rm -rf ${ALL}
