@@ -30,8 +30,28 @@ static void Deamon(){
         exit(EXIT_SUCCESS);
     }
     
+    if(setsid<0){
+        exit(EXIT_FAILURE);
+    }
     
+    signal(SIGCHLD, SIG_IGN);
+    signal(SIGHUP, SIG_IGN);
     
+    pid = fork(); 
+    
+    if(pid<0){
+        exit(EXIT_FAILURE);
+    }else if(pid>0){
+        exit(EXIT_SUCCESS);
+    }
+    
+    unmask(0);
+    
+    for(n = sysconf(_SC_OPEN_MAX); n>0; n--){
+        close(n);
+    }
+    
+    openlog("start", LOG_PID, LOG_DAEMON);
 }
 
 char * endings[] ={"gif","image/gif","txt","text/plain",
