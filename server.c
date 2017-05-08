@@ -17,6 +17,32 @@
 #define PORT 80
 #define SIZE 8
 #define MSGSIZE 1024
+#define WRITE 1
+
+
+static void Deamon(){
+    pid_t pid;
+    pid = fork(); 
+    
+    if(pid<0){
+        exit(EXIT_FAILURE);
+    }else if(pid>0){
+        exit(EXIT_SUCCESS);
+    }
+    
+    
+    
+}
+
+char * endings[] ={"gif","image/gif","txt","text/plain",
+                   "jpg","image/jpg","jpeg","image/jpeg",
+                   "png", "image/png","ico", "image/ico",
+                   "zip", "image/zip","gz","image/gz","tar", 
+                   "image/tar","htm", "text/html","html",
+                   "text/html","css","text/css","php", 
+                   "text/html","pdf","application/pdf",
+                   "zip","application/octet-stream","rar",
+                   "application/octet-stream","js","application/javascript"};
 
 int readLine(int s, char *line, int *result_size) {
     int acum=0, size;
