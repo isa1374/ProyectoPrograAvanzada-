@@ -123,23 +123,41 @@ int writeLine(int s, char *line, int total_size) {
 
 int serve(int s) {
     char command[MSGSIZE];
-    int size, r, nlc = 0, fd, read_bytes;
-
+    int size, r, nlc = 0, fd, read_bytes, met, tam;
+    
+    //Tamaños predeterminados 
+    char url[255];
+    char path[255];
+    char uri[255]; 
+    char buff[255]; 
+    char method[255];
+    char t; 
+    
+    pid_t pid; 
+    uri[0] = '\0';
+    
+    //path dentro de la instancia 
+    starcat(uri, " ");
+    
     // Lee lo que pide el cliente
     while(1) {
         r = readLine(s, command, &size);
         command[size-2] = 0;
         size-=2;
+        
+        openlog("Petitions", LOG_PID, LOG_USER);
+        syslog(LOG_INFO, "Header %s\n", command);
+        closelog();
+        
+        strcat(buff,command);
+        strcat(buff, "\n");
+        
         printf("[%s]\n", command);
-        if(command[size-1] == '\n' && command[size-2] == '\r') {
+        if(size==0||command[size-1] == '\n' && command[size-2] == '\r') {
             break;
         }
-	// Esto esta mal mal mal 
-	if(strlen(command) == 0) {
-	    break;
-	}
+        
     }
-    sleep(1);
 
     sprintf(command, "HTTP/1.0 200 OK\r\n");
     writeLine(s, command, strlen(command));
