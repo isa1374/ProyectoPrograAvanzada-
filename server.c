@@ -173,19 +173,22 @@ int serve(int s) {
 		suma += size;
 		if (suma >= 29936) break;
 	}
-
-
-
     sync();
 }
 
 int main() {
     int sd, sdo, addrlen, size, r;
     struct sockaddr_in sin, pin;
+    
+    int activar =0; 
+    activar = atoi(argv[1]);
+    
+    if(activar == 1){
+        Daemon();
+    }
 
     // 1. Crear el socket
     sd = socket(AF_INET, SOCK_STREAM, 0);
-
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;
@@ -197,13 +200,15 @@ int main() {
 		perror("bind");
 		return -1;
 	}
+    
     // 3. Configurar el backlog
     listen(sd, 5);
-
     addrlen = sizeof(pin);
+    
     // 4. aceptar conexión
+    signal(SIGCHLD,SIG_IGN);
     while( (sdo = accept(sd, (struct sockaddr *)  &pin, &addrlen)) > 0) {
-        //if(!fork()) {
+        if(!fork()) {
             printf("Conectado desde %s\n", inet_ntoa(pin.sin_addr));
             printf("Puerto %d\n", ntohs(pin.sin_port));
 
@@ -211,10 +216,9 @@ int main() {
 
             close(sdo);
             exit(0);
-        //}
+        }
     }
+    
     close(sd);
-
     sleep(1);
-
 }
