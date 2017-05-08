@@ -158,39 +158,214 @@ int serve(int s) {
         }
         
     }
+    
+    int h=0, o=0, p=1;
+    
+    while(!isspace(buff[h]) && (o<sizeof(method)-1)){
+        method[o]=buff[h];
+        h++; 
+        o++;
+    }
+    
+    method[h] = '\0'; 
+    h=0;
+    
+    while(isscape(buff[o]) && (o<sizeof(url)-1 && (buff[o] != '\n'))){
+        url[h] = buff[o];
+        o++;
+        h++;
+    }
+    url[h] = '\0';
+    
+    if(strcmp(url, "/")==0){
+        strcat(uri, "/index.html");
+    }else{
+        strcat(uri, url);
+    }
+    
+    //tipo de acción 
+    if(strstr(uri, "?")>0){
+        if(strcmp(method, "GET")==0){
+            met = 1;
+        }
+    }else if(strcmp(methos, "POST")==0){
+        met =2;
+    }else{
+        met=3;
+    }
+    
+    printf("CGI: %d\n", met);
+    
+    switch(met){
+        case 1: 
+            char *t_q; 
+            char sem[255];
+            char *t_in; 
+            char *t_eq; 
+            
+            sem[0]='\0';
+            printf("URL%s\n",url); 
+            
+            t_in =strtok(url,"?");
+            t_in=strtok(NULL,"?");
+            t_eq=strtok(t_in,"="); 
+            
+            strcat(sem,"SEMANTIC=http://54.17.5.168.195/");
+            strcat(sem,t_eq);
+            
+            while((t_eq=strtok(NULL,"="))!=NULL){
+                strcat(sem,"/");
+                strcat(sem,t_eq);
+            }
+            
+            printf("SEMANTIC URL: %s\n",sem);
+            
+            //get query and token 
+            int p_read[2];
+            int p_write[2];
+            pipe(p_read);
+            pipe(p_write);
+            printf("URI: %s\n",uri);
+            
+            t_q ="QUERY_STRING=";
+            t = strtok(uri,"?");
+            t= strtok(NULL,"?");
+            printf)"Token: %s\n", t);
+            
+            char que[1024];
+            strcat(que,t_q);
+            strcat(que,t);
+            printf(que);
+            
+            if(!fork()){
+                close(p_read[0]);
+                close(p_write[1]);
+                
+                dup2(p_read[1], 1);
+                dup2(p_write[0], 0);
+                
+                putenv(sem);
+                putenv("REQUEST_METHOD=GET");
+                putenv("REQUEST_STATUS=True");
+                putenv(que);
+                
+                //place where php is saved
+                putenv("SCRIPT_FILENAME=./files/test.php");
+                
+                if(execlp("php-cg1", "php-cgi","./files/test.php", 0)<0){
+                    openlog("ErrorEXECLP", LOG_PID, LOG_USER);
+                    syslog(LOG_INFO, "Error: %s\n", strerror(errno));
+                    closelog(); 
+                    perror("execlp");
+                }
+            }
+            close(p_read[1]);
+            close(p_write[0]);
+            
+            char aux; 
+            int  te =0; 
+            char buffx[100000];
+            
+            while(read(p_read[0], &aux, 1)>0){
+                buffx[te] = aux;
+                te++;
+            }
+            
+            char buffer[32]; 
+            int size = 0; 
+            
+            sprintf(command, "HTTP/1.0 200 OK\r\n");
+            writeLine(s, command, strlen(command));
+            
+             sprintf(command, "Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n");
+            writeLine(s, command, strlen(command));
+            
+            sprintf(command, "Content-Type:text/html\r\n");
+            writeLine(s, command, strlen(command));
 
-    sprintf(command, "HTTP/1.0 200 OK\r\n");
-    writeLine(s, command, strlen(command));
+            sprintf(command, "Content-Length: %d\r\n",t-50);
+            writeLine(s, command, strlen(command));
 
-    sprintf(command, "Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n");
-    writeLine(s, command, strlen(command));
-
-    sprintf(command, "Content-Type: image/jpeg\r\n");
-    writeLine(s, command, strlen(command));
-
-    sprintf(command, "Content-Length: 29936\r\n");
-    writeLine(s, command, strlen(command));
-
-    sprintf(command, "\r\n");
-    writeLine(s, command, strlen(command));
-
-    FILE *fin = fopen("mainiso_forcampus.jpg", "r");
-	FILE *fout = fdopen(s, "w");
-
-	struct stat buf;
-
-	stat("mainiso?forcampus.jpg", &buf);
-	printf("Size -----------> %d\n", buf.st_size);
-
-	char file[32*1024];
-	int suma = 0;
-	size = fread(file, 1, 29936, fin);
-	printf("Archivo: %d\n", size);
-
-    while( (size=write(s, &file[suma], MSGSIZE)) > 0) {
-		suma += size;
-		if (suma >= 29936) break;
-	}
+            sprintf(command, "\r\n");
+            writeLine(s, command, strlen(command));
+            
+            int au = 50; 
+            while(au<te){
+                write(s, &buff[au], 1);
+                au++;
+            }
+            
+            break;
+            
+        case 2: 
+            break; 
+            
+        case 3: 
+            printf("No path in URL: %s\n", url);
+            path[0] = '\0';
+            strcat(path,uri);
+            printf("Path: %s\n", path);
+            t = strtok(uri, ".");
+            t = strok(NULL, ".");
+            FILE *f = fopen(path, "r");
+            
+            if(f != NULL){
+                fseek(f, 0, SEEK_END);
+                tam =ftell(f);
+                fseek(f, 0, SEEK_SET);
+                
+                sprintf(command, "HTTP/1.0 200 OK\r\n");
+                writeLine(s, command, strlen(command));
+                
+                 sprintf(command, "Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n");
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "Content-Type: %s\r\n", getType(t));
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "Content-Length: %s\r\n", tam);
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "\r\n");
+                writeLine(s, command, strlen(command));
+                
+                FILE *out = fdopen(s, "w"); 
+                char file[tam];
+                int su =0; 
+                size = fread(file, 1,tam,f); 
+                printf("File: %d\n", size);
+                while((size=write(s, &file[su], size))>0){
+                    su +=size; 
+                    if(suma>=tam){
+                        break;
+                    }
+                    size = fread(file, 1,tam,f);
+                }
+            }else{
+                openlog("Invalid page. ", LOG_PID, LOG_USER);
+                syslog(LOG_INFO, "File not found.\n");
+                closelog(); 
+                
+                sprintf(command, "HTTP/1.0 200 OK\r\n");
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n");
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "Content-Type:text/plain\r\n");
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "Content-Length:9\r\n");
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "\r\n");
+                writeLine(s, command, strlen(command));
+                
+                sprintf(command, "Error 404\r\n");
+                writeLine(s, command, strlen(command));
+            }
+            break;
+    }
     sync();
 }
 
