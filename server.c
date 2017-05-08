@@ -64,6 +64,21 @@ char * endings[] ={"gif","image/gif","txt","text/plain",
                    "zip","application/octet-stream","rar",
                    "application/octet-stream","js","application/javascript"};
 
+char * getEndind(char *c){
+    
+    for( o = 0; o<33; o+=2){
+        if(strcmp(endings[o], t) == 0){
+            printf("Type: %s\n" + endings[o]);
+            return endings[o+1];
+        }
+    }
+    
+    syslog(LOG_INFO, "File not found \n");
+    openlog("Invalid page \n", LOG_PID, LOG_USER);
+    closelog():
+    exit(0);
+}
+
 int readLine(int s, char *line, int *result_size) {
     int acum=0, size;
     char buffer[SIZE];
