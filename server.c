@@ -20,7 +20,7 @@
 #define WRITE 1
 
 
-static void Deamon(){
+static void Daemon(){
     pid_t pid;
     pid = fork(); 
     
@@ -45,9 +45,9 @@ static void Deamon(){
         exit(EXIT_SUCCESS);
     }
     
-    unmask(0);
+    umask(0);
     
-    for(n = sysconf(_SC_OPEN_MAX); n>0; n--){
+    for(int n = sysconf(_SC_OPEN_MAX); n>0; n--){
         close(n);
     }
     
@@ -64,18 +64,18 @@ char * endings[] ={"gif","image/gif","txt","text/plain",
                    "zip","application/octet-stream","rar",
                    "application/octet-stream","js","application/javascript"};
 
-char * getEndind(char *c){
+char * getEnding(char *t){
     
-    for( o = 0; o<33; o+=2){
+    for( int o = 0; o<33; o+=2){
         if(strcmp(endings[o], t) == 0){
-            printf("Type: %s\n" + endings[o]);
+            printf("Type: %s\n", endings[o]);
             return endings[o+1];
         }
     }
     
     syslog(LOG_INFO, "File not found \n");
     openlog("Invalid page \n", LOG_PID, LOG_USER);
-    closelog():
+    closelog();
     exit(0);
 }
 
@@ -131,12 +131,12 @@ int serve(int s) {
     char uri[255]; 
     char buff[255]; 
     char method[255];
-    char t; 
+    char *t; 
     
     pid_t pid; 
     uri[0] = '\0';
     
-    //path dentro de la instancia 
+    //path dentro de la instancia donde está el proyecto 
     starcat(uri, " ");
     
     // Lee lo que pide el cliente
@@ -153,7 +153,7 @@ int serve(int s) {
         strcat(buff, "\n");
         
         printf("[%s]\n", command);
-        if(size==0||command[size-1] == '\n' && command[size-2] == '\r') {
+        if(size==0||(command[size-1] == '\n' && command[size-2] == '\r')) {
             break;
         }
         
@@ -170,7 +170,7 @@ int serve(int s) {
     method[h] = '\0'; 
     h=0;
     
-    while(isscape(buff[o]) && (o<sizeof(url)-1 && (buff[o] != '\n'))){
+    while(isspace(buff[o]) && (o<sizeof(url)-1 && (buff[o] != '\n'))){
         url[h] = buff[o];
         o++;
         h++;
@@ -188,7 +188,7 @@ int serve(int s) {
         if(strcmp(method, "GET")==0){
             met = 1;
         }
-    }else if(strcmp(methos, "POST")==0){
+    }else if(strcmp(method, "POST")==0){
         met =2;
     }else{
         met=3;
@@ -197,11 +197,14 @@ int serve(int s) {
     printf("CGI: %d\n", met);
     
     switch(met){
-        case 1: 
-            char *t_q; 
+        case 1:
+            
+            
+            char k; 
             char sem[255];
             char *t_in; 
             char *t_eq; 
+            char *t_query; 
             
             sem[0]='\0';
             printf("URL%s\n",url); 
@@ -227,15 +230,15 @@ int serve(int s) {
             pipe(p_write);
             printf("URI: %s\n",uri);
             
-            t_q ="QUERY_STRING=";
+            t_query ="QUERY_STRING=";
             t = strtok(uri,"?");
-            t= strtok(NULL,"?");
-            printf)"Token: %s\n", t);
+            t = strtok(NULL,"?");
+            printf("Token: %s\n", t);
             
             char que[1024];
-            strcat(que,t_q);
+            strcat(que,t_query);
             strcat(que,t);
-            printf(que);
+            printf("%s",que);
             
             if(!fork()){
                 close(p_read[0]);
@@ -283,7 +286,7 @@ int serve(int s) {
             sprintf(command, "Content-Type:text/html\r\n");
             writeLine(s, command, strlen(command));
 
-            sprintf(command, "Content-Length: %d\r\n",t-50);
+            sprintf(command, "Content-Length: %s\r\n",t-50);
             writeLine(s, command, strlen(command));
 
             sprintf(command, "\r\n");
@@ -306,7 +309,7 @@ int serve(int s) {
             strcat(path,uri);
             printf("Path: %s\n", path);
             t = strtok(uri, ".");
-            t = strok(NULL, ".");
+            t = strtok(NULL, ".");
             FILE *f = fopen(path, "r");
             
             if(f != NULL){
@@ -320,10 +323,10 @@ int serve(int s) {
                  sprintf(command, "Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n");
                 writeLine(s, command, strlen(command));
                 
-                sprintf(command, "Content-Type: %s\r\n", getType(t));
+                sprintf(command, "Content-Type: %s\r\n", getEnding(t));
                 writeLine(s, command, strlen(command));
                 
-                sprintf(command, "Content-Length: %s\r\n", tam);
+                sprintf(command, "Content-Length: %d\r\n", tam);
                 writeLine(s, command, strlen(command));
                 
                 sprintf(command, "\r\n");
@@ -336,7 +339,7 @@ int serve(int s) {
                 printf("File: %d\n", size);
                 while((size=write(s, &file[su], size))>0){
                     su +=size; 
-                    if(suma>=tam){
+                    if(su>=tam){
                         break;
                     }
                     size = fread(file, 1,tam,f);
@@ -369,7 +372,7 @@ int serve(int s) {
     sync();
 }
 
-int main() {
+int main(int argc, char **argv) {
     int sd, sdo, addrlen, size, r;
     struct sockaddr_in sin, pin;
     
