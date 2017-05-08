@@ -255,7 +255,7 @@ int serve(int s) {
                 //place where php is saved
                 putenv("SCRIPT_FILENAME=./files/test.php");
                 
-                if(execlp("php-cg1", "php-cgi","./files/test.php", 0)<0){
+                if(execlp("php-cgi", "php-cgi","./files/test.php", 0)<0){
                     openlog("ErrorEXECLP", LOG_PID, LOG_USER);
                     syslog(LOG_INFO, "Error: %s\n", strerror(errno));
                     closelog(); 

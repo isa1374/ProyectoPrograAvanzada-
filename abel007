@@ -1,0 +1,101 @@
+[33mcommit 8914a4ecb7bcb1151bfe346889e98853e88665c0[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Mon May 8 11:02:18 2017 -0500
+
+    correccion de errores
+
+[33mcommit 468330f9034cd7ab0822357880d8223e8c8f8d93[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Mon May 8 10:32:32 2017 -0500
+
+    serve
+
+[33mcommit aee011aa4a420dec47f00944c64b34efc71acb4d[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Sun May 7 23:34:21 2017 -0500
+
+    command
+
+[33mcommit 2b65d9e187ee1c5cb03b3e8eea1a191911bae17a[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Sun May 7 22:54:07 2017 -0500
+
+    instance daemon in main
+
+[33mcommit 58ab58ed91e978db9a8f82dd28ce40bedd70b359[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Sun May 7 22:31:13 2017 -0500
+
+    getEnding func
+
+[33mcommit 36a976f6e133ca2fba2cf2b356642c8a68b41fef[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Sun May 7 22:13:41 2017 -0500
+
+     daemon
+
+[33mcommit 0f80923597f308eae3ccf1f29853383ac1535173[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Sun May 7 22:03:37 2017 -0500
+
+    comienzo daemon
+
+[33mcommit c1d0c1824caa49d1f11a6ed24c91610ee4421a1a[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Thu May 4 21:14:08 2017 -0500
+
+    ^_^
+
+[33mcommit 3586aefa649e11dbcba8743cf6cacdc3cc56bd89[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Thu May 4 21:11:26 2017 -0500
+
+    makefile con archivos actuales
+
+[33mcommit d751978e4a1bd288edc4a0e3eacc39901920bf5b[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Thu May 4 21:09:26 2017 -0500
+
+    makefile
+
+[33mcommit 6c293ff26288f59521a39f5bfe4b11d0e527de3e[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Thu May 4 21:05:41 2017 -0500
+
+    server half
+
+[33mcommit 694e19c3acd93cd0339be2c8c98b3090271463b5[m
+Author: Karla <karla@iMac-de-Karlita.local>
+Date:   Thu May 4 20:06:51 2017 -0500
+
+    client
+
+[33mcommit 5d283033eef1971404b6b74f636f84c3177fb534[m
+Author: Isa <isha13gp@hotmail.com>
+Date:   Thu May 4 19:44:45 2017 -0500
+
+    Update README.md
+
+[33mcommit adb4c3bd5f0684acaa6d7ac7ed4bc428973f6f27[m
+Author: Isa <isha13gp@hotmail.com>
+Date:   Thu May 4 19:43:46 2017 -0500
+
+    Update README.md
+
+[33mcommit b92ca7a205e583dbe8bc686029ab17516c872d25[m
+Author: Isa <isha13gp@hotmail.com>
+Date:   Thu May 4 19:43:28 2017 -0500
+
+    Update README.md
+
+[33mcommit b4e03b5f812b092a1ce84b6ce8fbe59cfc733fc7[m
+Author: Isa <isha13gp@hotmail.com>
+Date:   Thu May 4 15:50:15 2017 -0500
+
+    Update README.md
+
+[33mcommit ec9af17838ccc4c8136afc8d49a2b391fcb87839[m
+Author: Isa <isha13gp@hotmail.com>
+Date:   Thu May 4 15:46:32 2017 -0500
+
+    Initial commit
