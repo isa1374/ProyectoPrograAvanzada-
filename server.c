@@ -12,20 +12,16 @@
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
-#define PORT 4001 
+#define PORT 4000 
 #define SIZE 8
 #define MSGSIZE 1024
 #define READ 0
 #define WRITE 1
+char * extensions[] ={"gif","image/gif","txt","text/plain","jpg","image/jpg","jpeg","image/jpeg","png", "image/png","ico", "image/ico","zip", "image/zip","gz","image/gz",
+    "tar", "image/tar","htm", "text/html","html","text/html","css","text/css","php", "text/html","pdf","application/pdf","zip","application/octet-stream","rar","application/octet-stream","js","application/javascript"};
 
-char * extensions[] ={"gif","image/gif","txt","text/plain","jpg","image/jpg","jpeg",
-                      "image/jpeg","png", "image/png","ico", "image/ico","zip", 
-                      "image/zip","gz","image/gz", "tar", "image/tar","htm", 
-                      "text/html","html","text/html","css","text/css","php", 
-                      "text/html","pdf","application/pdf","zip","application/octet-stream",
-                      "rar","application/octet-stream","js","application/javascript"};
-
-static void demonizar(){
+static void demonizar()
+{
     pid_t pid;
     pid = fork();
     if (pid < 0)
@@ -47,7 +43,7 @@ static void demonizar(){
     {
         close (x);
     }
-    openlog ("firstdaemon", LOG_PID, LOG_DAEMON);
+    openlog ("primerdaemon", LOG_PID, LOG_DAEMON);
 }
 char * obtenerTipo(char *token){
     int i;
@@ -57,8 +53,8 @@ char * obtenerTipo(char *token){
             return extensions[i+1];
         }
     }
-    openlog("Pag no válida", LOG_PID | LOG_CONS, LOG_USER);
-    syslog(LOG_INFO, "No se encontró el archivo...\n");
+    openlog("Pagina no válida", LOG_PID | LOG_CONS, LOG_USER);
+    syslog(LOG_INFO, "No se encontró el archivo\n");
     closelog();
     exit(0);
 }
@@ -105,6 +101,8 @@ int writeLine(int s, char *line, int total_size) {
     return 0;
 }
 
+
+
 int serve(int s) {
     char command[MSGSIZE];
     int size, r, nlc = 0, fd, read_bytes, tamanio,tipo_metodo;
@@ -140,6 +138,7 @@ int serve(int s) {
             break;
         }
     }
+
     int i = 0, j = 0, k = 1;
     while (!isspace(buff[j]) && (i < sizeof(method) - 1)){
         method[i] = buff[j];
@@ -242,13 +241,13 @@ int serve(int s) {
                 token_int=strtok(url,"?");
                 token_int=strtok(NULL,"?");
                 token_igual=strtok(token_int,"=");
-                strcat(semantic,"SEMANTIC=http://127.0.0.1/");
+                
                 strcat(semantic,token_igual);
                 while((token_igual=strtok(NULL,"="))!=NULL){
                      strcat(semantic,"/");
                      strcat(semantic,token_igual);  
                 }
-                printf("URL semantico 1: %s\n",semantic);
+                
                 int pipe_read[2];
                 int pipe_write[2];
                 pipe(pipe_read);
@@ -362,6 +361,7 @@ int main() {
     }
     close(sd);
     sleep(1);
+
 }
 
 
